@@ -7,8 +7,9 @@ class Lexer {
         var pos = 0
 
         while (pos < input.length) {
-            tokens.add(createToken(input, pos))
-            pos += 1
+            val token = createToken(input, pos)
+            tokens.add(token)
+            pos += token.data.length
         }
 
         return tokens
@@ -33,7 +34,8 @@ class Lexer {
     }
 
     private fun consumeNameOrKeyword(input: String, pos: Int): Token {
-        return Name(consume(input, pos) { it.isWordCharacter() })
+        val lexeme = consume(input, pos) { it.isWordCharacter() }
+        return if (lexeme.isKeyword()) Keyword(lexeme) else Name(lexeme)
     }
 
     private fun consumeNumber(input: String, pos: Int): Token {

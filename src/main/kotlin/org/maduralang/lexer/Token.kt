@@ -15,6 +15,11 @@ data class Name(override val data: String) : Token {
     override fun toString(): String = "$data : $type"
 }
 
+data class Keyword(override val data: String) : Token {
+    override val type: TokenType get() = TokenType.KEYWORD
+    override fun toString(): String = "$data : $type"
+}
+
 data class Number(override val data: String) : Token {
     override val type: TokenType get() = TokenType.NUMBER
     override fun toString(): String = "$data : $type"
@@ -33,6 +38,7 @@ data class Invalid(override val data: String) : Token {
 enum class TokenType {
     WHITESPACE,
     NAME,
+    KEYWORD,
     NUMBER,
     SYMBOL,
     INVALID
