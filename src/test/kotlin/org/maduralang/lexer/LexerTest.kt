@@ -91,7 +91,7 @@ internal class LexerTest {
     }
 
     @Test
-    fun `lexer should recognize multiple simple symbols`() {
+    fun `lexer should recognize various simple symbols`() {
         val access = "[]"
         val result = lexer.scan(access)
         assertEquals(listOf(SymbolToken("["), SymbolToken("]")), result)
@@ -105,9 +105,9 @@ internal class LexerTest {
     }
 
     @Test
-    fun `lexer should recognize simple programs`() {
-        val programm = "fn main() => run()"
+    fun `lexer should scan simple programs correctly`() {
+        val programm = "fn main() => println(\"Hello world\")"
         val result = lexer.scan(programm)
-        assertEquals(listOf(KeywordToken("fn"), NameToken("main"), SymbolToken("("), SymbolToken(")"), SymbolToken("=>"), NameToken("run"), SymbolToken("("), SymbolToken(")")), result)
+        assertEquals(listOf(KeywordToken("fn"), NameToken("main"), SymbolToken("("), SymbolToken(")"), SymbolToken("=>"), NameToken("println"), SymbolToken("("), StringToken("\"Hello world\""), SymbolToken(")")), result)
     }
 }
