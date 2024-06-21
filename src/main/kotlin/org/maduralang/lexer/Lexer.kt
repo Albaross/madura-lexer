@@ -27,6 +27,9 @@ class Lexer {
         if (c.isDigit())
             return consumeNumber(input, pos)
 
+        if (c == '@')
+            return Meta(consume(input, pos) { it.isWordCharacter() })
+
         if (c.isSymbol())
             return consumeSymbol(input, pos)
 

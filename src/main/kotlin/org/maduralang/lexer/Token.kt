@@ -30,6 +30,11 @@ data class Symbol(override val data: String) : Token {
     override fun toString(): String = "$data : $type"
 }
 
+data class Meta(override val data: String) : Token {
+    override val type: TokenType get() = TokenType.META
+    override fun toString(): String = "$data : $type"
+}
+
 data class Invalid(override val data: String) : Token {
     override val type: TokenType get() = TokenType.INVALID
     override fun toString(): String = "$type"
@@ -41,5 +46,6 @@ enum class TokenType {
     KEYWORD,
     NUMBER,
     SYMBOL,
+    META,
     INVALID
 }
