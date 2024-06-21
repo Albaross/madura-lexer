@@ -12,4 +12,16 @@ internal class LexerTest {
         val result = lexer.scan("")
         assertEquals(emptyList(), result)
     }
+
+    @Test
+    fun `lexer should recognize spaces as whitespace`() {
+        val result = lexer.scan(" ")
+        assertEquals(listOf(Whitespace(" ")), result)
+    }
+
+    @Test
+    fun `lexer should recognize lower case letter as a name`() {
+        val result = lexer.scan("x")
+        assertEquals(listOf(Name("x")), result)
+    }
 }
