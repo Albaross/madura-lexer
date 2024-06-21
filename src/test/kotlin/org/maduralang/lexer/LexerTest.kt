@@ -39,8 +39,8 @@ internal class LexerTest {
 
     @Test
     fun `lexer should recognize keywords`() {
-        val result = lexer.scan(Keywords.IF.toString())
-        assertEquals(listOf(KeywordToken(Keywords.IF.toString())), result)
+        val result = lexer.scan(Keyword.IF.toString())
+        assertEquals(listOf(KeywordToken(Keyword.IF.toString())), result)
     }
 
     @Test
