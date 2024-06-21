@@ -2,14 +2,16 @@ package org.maduralang.lexer
 
 class Lexer {
 
-    fun scan(input: String): List<Token> {
+    fun scan(input: String, ignoreWhitespaces: Boolean = true): List<Token> {
         val tokens = ArrayList<Token>()
         var pos = 0
 
         while (pos < input.length) {
             val token = createToken(input, pos)
-            tokens.add(token)
             pos += token.data.length
+
+            if (!ignoreWhitespaces || token !is WhitespaceToken)
+                tokens.add(token)
         }
 
         return tokens
@@ -42,7 +44,8 @@ class Lexer {
     }
 
     private fun consumeNumber(input: String, pos: Int): Token {
-        return NumberToken(consume(input, pos) { it.isDigit() })
+        val number = consume(input, pos) { it.isDigit() }
+        return NumberToken(number)
     }
 
     private fun consumeSymbol(input: String, pos: Int): Token {

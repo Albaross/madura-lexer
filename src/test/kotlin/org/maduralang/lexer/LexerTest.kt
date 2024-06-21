@@ -15,55 +15,99 @@ internal class LexerTest {
 
     @Test
     fun `lexer should recognize whitespaces`() {
-        val result = lexer.scan(" ")
-        assertEquals(listOf(WhitespaceToken(" ")), result)
+        val space = " "
+        val result = lexer.scan(space, ignoreWhitespaces = false)
+        assertEquals(listOf(WhitespaceToken(space)), result)
     }
 
     @Test
     fun `lexer should recognize line breaks`() {
-        val result = lexer.scan("\n")
-        assertEquals(listOf(WhitespaceToken("\n")), result)
+        val lineBreak = "\n"
+        val result = lexer.scan(lineBreak, ignoreWhitespaces = false)
+        assertEquals(listOf(WhitespaceToken(lineBreak)), result)
     }
 
     @Test
     fun `lexer should recognize single letter names`() {
-        val result = lexer.scan("x")
-        assertEquals(listOf(NameToken("x")), result)
+        val shortName = "x"
+        val result = lexer.scan(shortName)
+        assertEquals(listOf(NameToken(shortName)), result)
     }
 
     @Test
     fun `lexer should recognize multi letter names`() {
-        val result = lexer.scan("len")
-        assertEquals(listOf(NameToken("len")), result)
+        val longName = "length"
+        val result = lexer.scan(longName)
+        assertEquals(listOf(NameToken(longName)), result)
     }
 
     @Test
     fun `lexer should recognize keywords`() {
-        val result = lexer.scan(Keyword.IF.toString())
-        assertEquals(listOf(KeywordToken(Keyword.IF.toString())), result)
+        val keyword = "if"
+        val result = lexer.scan(keyword)
+        assertEquals(listOf(KeywordToken(keyword)), result)
     }
 
     @Test
-    fun `lexer should recognize single digit numbers`() {
-        val result = lexer.scan("3")
-        assertEquals(listOf(NumberToken("3")), result)
+    fun `lexer should recognize single digit integers`() {
+        val smallInteger = "3"
+        val result = lexer.scan(smallInteger)
+        assertEquals(listOf(NumberToken(smallInteger)), result)
     }
 
     @Test
-    fun `lexer should recognize multi digit numbers`() {
-        val result = lexer.scan("1337")
-        assertEquals(listOf(NumberToken("1337")), result)
+    fun `lexer should recognize multi digit integers`() {
+        val leet = "1337"
+        val result = lexer.scan(leet)
+        assertEquals(listOf(NumberToken(leet)), result)
+    }
+
+    @Test
+    fun `lexer should recognize decimals`() {
+        val pi = "3.14"
+        val result = lexer.scan(pi)
+        assertEquals(listOf(NumberToken(pi)), result)
+    }
+
+    @Test
+    fun `lexer should recognize attributes on numbers`() {
+        val attribute = "50.successor"
+        val result = lexer.scan(attribute)
+        assertEquals(listOf(NumberToken("50"),SymbolToken("."),NameToken("successor")), result)
     }
 
     @Test
     fun `lexer should recognize simple symbols`() {
-        val result = lexer.scan("+")
-        assertEquals(listOf(SymbolToken("+")), result)
+        val plus = "+"
+        val result = lexer.scan(plus)
+        assertEquals(listOf(SymbolToken(plus)), result)
+    }
+
+    @Test
+    fun `lexer should recognize composite symbols`() {
+        val fatArrow = "=>"
+        val result = lexer.scan(fatArrow)
+        assertEquals(listOf(SymbolToken(fatArrow)), result)
+    }
+
+    @Test
+    fun `lexer should recognize multiple simple symbols`() {
+        val access = "[]"
+        val result = lexer.scan(access)
+        assertEquals(listOf(SymbolToken("["), SymbolToken("]")), result)
     }
 
     @Test
     fun `lexer should recognize annotations`() {
-        val result = lexer.scan("@Data")
-        assertEquals(listOf(MetaToken("@Data")), result)
+        val annotation = "@Data"
+        val result = lexer.scan(annotation)
+        assertEquals(listOf(MetaToken(annotation)), result)
+    }
+
+    @Test
+    fun `lexer should recognize simple programs`() {
+        val programm = "fn main() => run()"
+        val result = lexer.scan(programm)
+        assertEquals(listOf(KeywordToken("fn"), NameToken("main"), SymbolToken("("), SymbolToken(")"), SymbolToken("=>"), NameToken("run"), SymbolToken("("), SymbolToken(")")), result)
     }
 }
