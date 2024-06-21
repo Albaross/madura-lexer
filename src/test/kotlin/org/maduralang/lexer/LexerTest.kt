@@ -77,6 +77,13 @@ internal class LexerTest {
     }
 
     @Test
+    fun `lexer should recognize strings`() {
+        val greeting = "\"Hello\""
+        val result = lexer.scan(greeting)
+        assertEquals(listOf(StringToken(greeting)), result)
+    }
+
+    @Test
     fun `lexer should recognize simple symbols`() {
         val plus = "+"
         val result = lexer.scan(plus)
