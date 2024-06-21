@@ -20,8 +20,20 @@ internal class LexerTest {
     }
 
     @Test
-    fun `lexer should recognize lower case letter as a name`() {
+    fun `lexer should recognize lower case letters as a name`() {
         val result = lexer.scan("x")
         assertEquals(listOf(Name("x")), result)
+    }
+
+    @Test
+    fun `lexer should recognize digits as a number`() {
+        val result = lexer.scan("3")
+        assertEquals(listOf(Number("3")), result)
+    }
+
+    @Test
+    fun `lexer should recognize plus as a symbol`() {
+        val result = lexer.scan("+")
+        assertEquals(listOf(Symbol("+")), result)
     }
 }
