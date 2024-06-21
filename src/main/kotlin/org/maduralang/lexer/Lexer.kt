@@ -19,7 +19,7 @@ class Lexer {
         val c = input[pos]
 
         if (c.isWhitespace())
-            return Whitespace("$c")
+            return WhitespaceToken("$c")
 
         if (c.isLetter())
             return consumeNameOrKeyword(input, pos)
@@ -28,25 +28,25 @@ class Lexer {
             return consumeNumber(input, pos)
 
         if (c == '@')
-            return Meta(consume(input, pos) { it.isWordCharacter() })
+            return MetaToken(consume(input, pos) { it.isWordCharacter() })
 
         if (c.isSymbol())
             return consumeSymbol(input, pos)
 
-        return Invalid("$c")
+        return InvalidToken("$c")
     }
 
     private fun consumeNameOrKeyword(input: String, pos: Int): Token {
         val lexeme = consume(input, pos) { it.isWordCharacter() }
-        return if (lexeme.isKeyword()) Keyword(lexeme) else Name(lexeme)
+        return if (lexeme.isKeyword()) KeywordToken(lexeme) else NameToken(lexeme)
     }
 
     private fun consumeNumber(input: String, pos: Int): Token {
-        return Number(consume(input, pos) { it.isDigit() })
+        return NumberToken(consume(input, pos) { it.isDigit() })
     }
 
     private fun consumeSymbol(input: String, pos: Int): Token {
-        return Symbol(consume(input, pos) { it.isSymbol() })
+        return SymbolToken(consume(input, pos) { it.isSymbol() })
     }
 
     private fun consume(input: String, start: Int, predicate: (Char) -> Boolean): String {
