@@ -63,10 +63,24 @@ internal class LexerTest {
     }
 
     @Test
-    fun `lexer should recognize decimals`() {
+    fun `lexer should allow separators in multi digit integers`() {
+        val million = "1_000_000"
+        val result = lexer.scan(million)
+        assertEquals(listOf(NumberToken(million)), result)
+    }
+
+    @Test
+    fun `lexer should recognize decimal numbers`() {
         val pi = "3.14"
         val result = lexer.scan(pi)
         assertEquals(listOf(NumberToken(pi)), result)
+    }
+
+    @Test
+    fun `lexer should allow separators in decimal numbers`() {
+        val separatedFloat = "6_000.7_7"
+        val result = lexer.scan(separatedFloat)
+        assertEquals(listOf(NumberToken(separatedFloat)), result)
     }
 
     @Test

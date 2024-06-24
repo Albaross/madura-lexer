@@ -44,17 +44,17 @@ class Lexer {
     }
 
     private fun consumeNumber(input: String, pos: Int): Token {
-        val numberPart = consume(input, pos, ::isDigitOrSeparator)
-        val intermediatePos = pos + numberPart.length
+        val integerPart = consume(input, pos, ::isDigitOrSeparator)
+        val intermediatePos = pos + integerPart.length
 
         if (lookahead(input, intermediatePos) { it == '.' }
             && lookahead(input, intermediatePos + 1, ::isDigit)) {
 
-            val decimalPart = consume(input, intermediatePos, ::isDigitOrSeparator)
-            return NumberToken(numberPart + decimalPart)
+            val fractionPart = consume(input, intermediatePos, ::isDigitOrSeparator)
+            return NumberToken(integerPart + fractionPart)
         }
 
-        return NumberToken(numberPart)
+        return NumberToken(integerPart)
     }
 
     private fun consumeSymbol(input: String, pos: Int): Token {
