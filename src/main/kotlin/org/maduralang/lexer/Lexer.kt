@@ -40,7 +40,7 @@ class Lexer {
                 return CommentToken(consume(input, pos) { it != '\n' && it != '\r' })
 
             if (c == '@')
-                return MetaToken(consume(input, pos, ::isWordChar))
+                return AnnotationToken(consume(input, pos, ::isWordChar))
 
             return consumeSymbol(input, pos)
         }

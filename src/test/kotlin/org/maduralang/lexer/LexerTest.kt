@@ -164,7 +164,7 @@ internal class LexerTest {
     fun `lexer should recognize annotations`() {
         val annotation = "@Data"
         val result = lexer.scan(annotation)
-        assertEquals(listOf(MetaToken(annotation)), result)
+        assertEquals(listOf(AnnotationToken(annotation)), result)
     }
 
     @Test
