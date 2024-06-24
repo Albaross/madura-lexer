@@ -29,20 +29,21 @@ class Lexer {
         if (isDigit(c))
             return consumeNumber(input, pos)
 
-        if (c == '.' && lookahead(input, pos + 1, ::isDigit))
-            return NumberToken(consume(input, pos, ::isDigitOrSeparator))
+        if (isSymbol(c)) {
+            if (c == '.' && lookahead(input, pos + 1, ::isDigit))
+                return NumberToken(consume(input, pos, ::isDigitOrSeparator))
 
-        if (isQuoteChar(c))
-            return StringToken(consumeEnclosed(input, pos, delimiter = c))
+            if (isQuoteChar(c))
+                return StringToken(consumeEnclosed(input, pos, delimiter = c))
 
-        if (c == '/' && lookahead(input, pos + 1) { it == '/' })
-            return CommentToken(consume(input, pos) { it != '\n' && it != '\r' })
+            if (c == '/' && lookahead(input, pos + 1) { it == '/' })
+                return CommentToken(consume(input, pos) { it != '\n' && it != '\r' })
 
-        if (c == '@')
-            return MetaToken(consume(input, pos, ::isWordChar))
+            if (c == '@')
+                return MetaToken(consume(input, pos, ::isWordChar))
 
-        if (isSymbol(c))
             return consumeSymbol(input, pos)
+        }
 
         return InvalidToken("$c")
     }
@@ -67,8 +68,35 @@ class Lexer {
     }
 
     private fun consumeSymbol(input: String, pos: Int): Token {
-        return SymbolToken(consume(input, pos, ::isSymbol))
-    }
+        val lexeme = when (val c = input[pos]) {
+            '.', '?' -> if (lookahead(input, pos + 1) { it == '.' }) "$c." else "$c"
 
+            '+', '*', '/', '^', '%', '<', '>' ->
+                if (lookahead(input, pos + 1) { it == '=' }) "$c=" else "$c"
+
+            '-' -> when {
+                lookahead(input, pos + 1) { it == '=' } -> "-="
+                lookahead(input, pos + 1) { it == '>' } -> "->"
+                else -> "-"
+            }
+
+            '&', '|' -> when {
+                lookahead(input, pos + 1) { it == c } -> "$c$c"
+                lookahead(input, pos + 1) { it == '=' } -> "$c="
+                else -> "$c"
+            }
+
+            '=' -> when {
+                lookahead(input, pos + 1) { it == '=' } -> if (lookahead(input, pos + 2) { it == '=' }) "===" else "=="
+                lookahead(input, pos + 1) { it == '>' } -> "=>"
+                else -> "="
+            }
+
+            ':' -> if (lookahead(input, pos + 1) { it == ':' }) "::" else ":"
+
+            else -> "$c"
+        }
+        return SymbolToken(lexeme)
+    }
 
 }
