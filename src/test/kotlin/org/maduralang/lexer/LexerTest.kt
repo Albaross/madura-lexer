@@ -98,7 +98,7 @@ internal class LexerTest {
     }
 
     @Test
-    fun `lexer should recognize various simple symbols`() {
+    fun `lexer should recognize various symbols`() {
         val access = "[]"
         val result = lexer.scan(access)
         assertEquals(listOf(SymbolToken("["), SymbolToken("]")), result)

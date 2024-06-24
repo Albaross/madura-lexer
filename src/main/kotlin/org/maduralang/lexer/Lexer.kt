@@ -20,41 +20,46 @@ class Lexer {
     private fun createToken(input: String, pos: Int): Token {
         val c = input[pos]
 
-        if (c.isWhitespace())
+        if (isWhitespace(c))
             return WhitespaceToken("$c")
 
-        if (c.isLetter())
+        if (isLetter(c))
             return consumeNameOrKeyword(input, pos)
 
-        if (c.isDigit())
+        if (isDigit(c))
             return consumeNumber(input, pos)
 
         if (c == '@')
-            return MetaToken(consume(input, pos) { it.isWordCharacter() })
+            return MetaToken(consume(input, pos, ::isWordChar))
 
-        if (c.isSymbol())
+        if (isSymbol(c))
             return consumeSymbol(input, pos)
 
         return InvalidToken("$c")
     }
 
     private fun consumeNameOrKeyword(input: String, pos: Int): Token {
-        val lexeme = consume(input, pos) { it.isWordCharacter() }
+        val lexeme = consume(input, pos, ::isWordChar)
         return if (lexeme.isKeyword()) KeywordToken(lexeme) else NameToken(lexeme)
     }
 
     private fun consumeNumber(input: String, pos: Int): Token {
-        val number = consume(input, pos) { it.isDigit() }
-        return NumberToken(number)
+        val numberPart = consume(input, pos, ::isDigitOrSeparator)
+        val intermediatePos = pos + numberPart.length
+
+        if (lookahead(input, intermediatePos) { it == '.' }
+            && lookahead(input, intermediatePos + 1, ::isDigit)) {
+
+            val decimalPart = consume(input, intermediatePos, ::isDigitOrSeparator)
+            return NumberToken(numberPart + decimalPart)
+        }
+
+        return NumberToken(numberPart)
     }
 
     private fun consumeSymbol(input: String, pos: Int): Token {
-        return SymbolToken(consume(input, pos) { it.isSymbol() })
+        return SymbolToken(consume(input, pos, ::isSymbol))
     }
 
-    private fun consume(input: String, start: Int, predicate: (Char) -> Boolean): String {
-        var pos = start + 1
-        while (pos < input.length && predicate(input[pos])) pos += 1
-        return input.substring(start, pos)
-    }
+
 }
