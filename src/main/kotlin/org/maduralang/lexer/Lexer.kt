@@ -48,12 +48,12 @@ class Lexer {
         return InvalidToken("$c")
     }
 
-    private fun consumeNameOrKeyword(input: String, pos: Int): Token {
+    private fun consumeNameOrKeyword(input: String, pos: Int): WordToken {
         val lexeme = consume(input, pos, ::isWordChar)
         return if (isKeyword(lexeme)) KeywordToken(lexeme) else NameToken(lexeme)
     }
 
-    private fun consumeNumber(input: String, pos: Int): Token {
+    private fun consumeNumber(input: String, pos: Int): NumberToken {
         if (input[pos] == '0') {
             if (lookahead(input, pos + 1) { it == 'x' } && lookahead(input, pos + 2, ::isHexDigit))
                 return NumberToken("0x" + consume(input, pos + 2, ::isHexDigitOrSeparator))
@@ -75,7 +75,7 @@ class Lexer {
         return NumberToken(integerPart)
     }
 
-    private fun consumeSymbol(input: String, pos: Int): Token {
+    private fun consumeSymbol(input: String, pos: Int): SymbolToken {
         val lexeme = when (val c = input[pos]) {
             '.', '?' -> if (lookahead(input, pos + 1) { it == '.' }) "$c." else "$c"
 

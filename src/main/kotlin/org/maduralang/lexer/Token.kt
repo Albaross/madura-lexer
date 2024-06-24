@@ -10,12 +10,14 @@ data class WhitespaceToken(override val data: String) : Token {
     override fun toString(): String = "$type"
 }
 
-data class NameToken(override val data: String) : Token {
+interface WordToken : Token
+
+data class NameToken(override val data: String) : WordToken {
     override val type: TokenType get() = TokenType.NAME
     override fun toString(): String = "$data : $type"
 }
 
-data class KeywordToken(override val data: String) : Token {
+data class KeywordToken(override val data: String) : WordToken {
     override val type: TokenType get() = TokenType.KEYWORD
     override fun toString(): String = "$data : $type"
 }
