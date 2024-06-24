@@ -91,6 +91,20 @@ internal class LexerTest {
     }
 
     @Test
+    fun `lexer should recognize hex numbers`() {
+        val hexNumber = "0x7f"
+        val result = lexer.scan(hexNumber)
+        assertEquals(listOf(NumberToken(hexNumber)), result)
+    }
+
+    @Test
+    fun `lexer should recognize bin numbers`() {
+        val binNumber = "0b101"
+        val result = lexer.scan(binNumber)
+        assertEquals(listOf(NumberToken(binNumber)), result)
+    }
+
+    @Test
     fun `lexer should recognize attributes on numbers`() {
         val attribute = "50.successor"
         val result = lexer.scan(attribute)

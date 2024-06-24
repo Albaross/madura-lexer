@@ -54,6 +54,14 @@ class Lexer {
     }
 
     private fun consumeNumber(input: String, pos: Int): Token {
+        if (input[pos] == '0') {
+            if (lookahead(input, pos + 1) { it == 'x' } && lookahead(input, pos + 2, ::isHexDigit))
+                return NumberToken("0x" + consume(input, pos + 2, ::isHexDigitOrSeparator))
+
+            if (lookahead(input, pos + 1) { it == 'b' } && lookahead(input, pos + 2, ::isBinDigit))
+                return NumberToken("0b" + consume(input, pos + 2, ::isBinDigitOrSeparator))
+        }
+
         val integerPart = consume(input, pos, ::isDigitOrSeparator)
         val intermediatePos = pos + integerPart.length
 
@@ -100,5 +108,4 @@ class Lexer {
 
         return SymbolToken(lexeme)
     }
-
 }
