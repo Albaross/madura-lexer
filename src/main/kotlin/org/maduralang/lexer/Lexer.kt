@@ -32,6 +32,9 @@ class Lexer {
         if (c == '@')
             return MetaToken(consume(input, pos, ::isWordChar))
 
+        if (c == '.' && lookahead(input, pos + 1, ::isDigit))
+            return NumberToken(consume(input, pos, ::isDigitOrSeparator))
+
         if (isSymbol(c))
             return consumeSymbol(input, pos)
 

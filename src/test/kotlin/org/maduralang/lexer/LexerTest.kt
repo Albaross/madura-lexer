@@ -77,6 +77,13 @@ internal class LexerTest {
     }
 
     @Test
+    fun `lexer should recognize decimal numbers starting with dot`() {
+        val pi = ".50"
+        val result = lexer.scan(pi)
+        assertEquals(listOf(NumberToken(pi)), result)
+    }
+
+    @Test
     fun `lexer should allow separators in decimal numbers`() {
         val separatedFloat = "6_000.7_7"
         val result = lexer.scan(separatedFloat)
