@@ -29,11 +29,14 @@ class Lexer {
         if (isDigit(c))
             return consumeNumber(input, pos)
 
-        if (c == '@')
-            return MetaToken(consume(input, pos, ::isWordChar))
-
         if (c == '.' && lookahead(input, pos + 1, ::isDigit))
             return NumberToken(consume(input, pos, ::isDigitOrSeparator))
+
+        if (isQuoteChar(c))
+            return StringToken(consumeEnclosed(input, pos, delimiter = c))
+
+        if (c == '@')
+            return MetaToken(consume(input, pos, ::isWordChar))
 
         if (isSymbol(c))
             return consumeSymbol(input, pos)

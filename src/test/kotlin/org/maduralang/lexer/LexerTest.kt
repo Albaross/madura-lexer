@@ -105,6 +105,27 @@ internal class LexerTest {
     }
 
     @Test
+    fun `lexer should handle strings with escaped quotes correctly`() {
+        val greeting = "\"He said: \\\"Hello\\\"\""
+        val result = lexer.scan(greeting)
+        assertEquals(listOf(StringToken(greeting)), result)
+    }
+
+    @Test
+    fun `lexer should recognize quotes within other quotes`() {
+        val quoteChar = "'\"'"
+        val result = lexer.scan(quoteChar)
+        assertEquals(listOf(StringToken(quoteChar)), result)
+    }
+
+    @Test
+    fun `lexer should handle undelimited strings correctly`() {
+        val undelimited = "\"still typing ..."
+        val result = lexer.scan(undelimited)
+        assertEquals(listOf(StringToken(undelimited)), result)
+    }
+
+    @Test
     fun `lexer should recognize simple symbols`() {
         val plus = "+"
         val result = lexer.scan(plus)
