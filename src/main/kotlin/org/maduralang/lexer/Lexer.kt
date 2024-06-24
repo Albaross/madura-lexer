@@ -35,6 +35,9 @@ class Lexer {
         if (isQuoteChar(c))
             return StringToken(consumeEnclosed(input, pos, delimiter = c))
 
+        if (c == '/' && lookahead(input, pos + 1) { it == '/' })
+            return CommentToken(consume(input, pos) { it != '\n' && it != '\r' })
+
         if (c == '@')
             return MetaToken(consume(input, pos, ::isWordChar))
 

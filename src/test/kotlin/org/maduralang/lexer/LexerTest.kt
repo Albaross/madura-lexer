@@ -94,7 +94,7 @@ internal class LexerTest {
     fun `lexer should recognize attributes on numbers`() {
         val attribute = "50.successor"
         val result = lexer.scan(attribute)
-        assertEquals(listOf(NumberToken("50"),SymbolToken("."),NameToken("successor")), result)
+        assertEquals(listOf(NumberToken("50"), SymbolToken("."), NameToken("successor")), result)
     }
 
     @Test
@@ -140,7 +140,7 @@ internal class LexerTest {
     }
 
     @Test
-    fun `lexer should recognize various symbols`() {
+    fun `lexer should recognize various successive symbols `() {
         val access = "[]"
         val result = lexer.scan(access)
         assertEquals(listOf(SymbolToken("["), SymbolToken("]")), result)
@@ -157,6 +157,25 @@ internal class LexerTest {
     fun `lexer should scan simple programs correctly`() {
         val programm = "fn main() => println(\"Hello world\")"
         val result = lexer.scan(programm)
-        assertEquals(listOf(KeywordToken("fn"), NameToken("main"), SymbolToken("("), SymbolToken(")"), SymbolToken("=>"), NameToken("println"), SymbolToken("("), StringToken("\"Hello world\""), SymbolToken(")")), result)
+        assertEquals(
+            listOf(
+                KeywordToken("fn"),
+                NameToken("main"),
+                SymbolToken("("),
+                SymbolToken(")"),
+                SymbolToken("=>"),
+                NameToken("println"),
+                SymbolToken("("),
+                StringToken("\"Hello world\""),
+                SymbolToken(")")
+            ), result
+        )
+    }
+
+    @Test
+    fun `lexer should recognize comments`() {
+        val comment = "const a // TODO"
+        val result = lexer.scan(comment)
+        assertEquals(listOf(KeywordToken("const"), NameToken("a"), CommentToken("// TODO")), result)
     }
 }
