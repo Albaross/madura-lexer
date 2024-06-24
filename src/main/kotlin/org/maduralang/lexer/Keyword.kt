@@ -8,6 +8,6 @@ enum class Keyword {
     override fun toString(): String = name.lowercase()
 }
 
-fun String.isKeyword(): Boolean = this in KEYWORDS
+fun isKeyword(lexeme: String): Boolean = lexeme in KEYWORDS
 
 private val KEYWORDS = Keyword.entries.map { it.toString() }.toSet()

@@ -50,7 +50,7 @@ class Lexer {
 
     private fun consumeNameOrKeyword(input: String, pos: Int): Token {
         val lexeme = consume(input, pos, ::isWordChar)
-        return if (lexeme.isKeyword()) KeywordToken(lexeme) else NameToken(lexeme)
+        return if (isKeyword(lexeme)) KeywordToken(lexeme) else NameToken(lexeme)
     }
 
     private fun consumeNumber(input: String, pos: Int): Token {
@@ -80,22 +80,24 @@ class Lexer {
                 else -> "-"
             }
 
-            '&', '|' -> when {
-                lookahead(input, pos + 1) { it == c } -> "$c$c"
-                lookahead(input, pos + 1) { it == '=' } -> "$c="
-                else -> "$c"
-            }
-
             '=' -> when {
                 lookahead(input, pos + 1) { it == '=' } -> if (lookahead(input, pos + 2) { it == '=' }) "===" else "=="
                 lookahead(input, pos + 1) { it == '>' } -> "=>"
                 else -> "="
             }
 
+            '&', '|' -> when {
+                lookahead(input, pos + 1) { it == c } -> "$c$c"
+                lookahead(input, pos + 1) { it == '=' } -> "$c="
+                else -> "$c"
+            }
+
+
             ':' -> if (lookahead(input, pos + 1) { it == ':' }) "::" else ":"
 
             else -> "$c"
         }
+
         return SymbolToken(lexeme)
     }
 
