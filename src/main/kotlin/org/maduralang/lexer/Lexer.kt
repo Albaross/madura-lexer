@@ -50,7 +50,7 @@ class Lexer {
 
     private fun consumeNameOrKeyword(input: String, pos: Int): WordToken {
         val lexeme = consume(input, pos, ::isWordChar)
-        return if (isKeyword(lexeme)) KeywordToken(lexeme) else NameToken(lexeme)
+        return if (isKeyword(lexeme)) KeywordToken.valueOf(lexeme.uppercase()) else NameToken(lexeme)
     }
 
     private fun consumeNumber(input: String, pos: Int): NumberToken {

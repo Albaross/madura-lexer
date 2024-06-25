@@ -17,13 +17,19 @@ data class NameToken(override val data: String) : WordToken {
     override fun toString(): String = "$data : $type"
 }
 
-data class KeywordToken(override val data: String) : WordToken {
-    constructor(keyword: Keyword) : this(keyword.name.lowercase())
+enum class KeywordToken : WordToken {
+    AS, BREAK, CATCH, CLASS, CONTINUE, CONST, DO, ELSE, ENUM, EXPORT, FALSE, FOR, FN, FUN, FUNC,
+    IF, IMPORT, IN, INLINE, IS, JUMP, LET, MATCH, NULL, OUT, PRIVATE, PROTECTED, PUBLIC, RETURN,
+    SHARED, SUPER, THIS, THROW, TRUE, TRY, TYPEALIAS, VAR, WHILE;
 
+    override val data: String get() = toString()
     override val type: TokenType get() = TokenType.KEYWORD
-    override fun toString(): String = "$data : $type"
-    fun asKeyword(): Keyword = Keyword.valueOf(data.uppercase())
+    override fun toString(): String = name.lowercase()
 }
+
+fun isKeyword(lexeme: String): Boolean = lexeme in KEYWORDS
+
+private val KEYWORDS = KeywordToken.entries.map { it.toString() }.toSet()
 
 data class NumberToken(override val data: String) : Token {
     constructor(number: Number) : this(number.toString())

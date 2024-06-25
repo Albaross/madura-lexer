@@ -43,8 +43,8 @@ internal class LexerTest {
 
     @Test
     fun `should recognize keywords`() {
-        val result = lexer.scan(Keyword.IF.toString())
-        assertEquals(listOf(KeywordToken(Keyword.IF)), result)
+        val result = lexer.scan(KeywordToken.IF.toString())
+        assertEquals(listOf(KeywordToken.IF), result)
     }
 
     @Test
@@ -172,7 +172,7 @@ internal class LexerTest {
         val result = lexer.scan(programm)
         assertEquals(
             listOf(
-                KeywordToken(Keyword.FN),
+                KeywordToken.FN,
                 NameToken("main"),
                 SymbolToken('('),
                 SymbolToken(')'),
@@ -189,6 +189,6 @@ internal class LexerTest {
     fun `should recognize comments`() {
         val comment = "const a // TODO"
         val result = lexer.scan(comment)
-        assertEquals(listOf(KeywordToken("const"), NameToken("a"), CommentToken("// TODO")), result)
+        assertEquals(listOf(KeywordToken.CONST, NameToken("a"), CommentToken("// TODO")), result)
     }
 }
