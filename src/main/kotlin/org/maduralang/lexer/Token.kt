@@ -20,6 +20,7 @@ data class NameToken(override val data: String) : WordToken {
 data class KeywordToken(override val data: String) : WordToken {
     override val type: TokenType get() = TokenType.KEYWORD
     override fun toString(): String = "$data : $type"
+    fun asKeyword(): Keyword = Keyword.valueOf(data.uppercase())
 }
 
 data class NumberToken(override val data: String) : Token {

@@ -1,6 +1,6 @@
 package org.maduralang.lexer
 
-import org.junit.jupiter.api.Test
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 internal class LexerTest {
