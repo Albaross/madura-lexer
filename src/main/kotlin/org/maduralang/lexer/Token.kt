@@ -18,12 +18,16 @@ data class NameToken(override val data: String) : WordToken {
 }
 
 data class KeywordToken(override val data: String) : WordToken {
+    constructor(keyword: Keyword) : this(keyword.name.lowercase())
+
     override val type: TokenType get() = TokenType.KEYWORD
     override fun toString(): String = "$data : $type"
     fun asKeyword(): Keyword = Keyword.valueOf(data.uppercase())
 }
 
 data class NumberToken(override val data: String) : Token {
+    constructor(number: Number) : this(number.toString())
+
     override val type: TokenType get() = TokenType.NUMBER
     override fun toString(): String = "$data : $type"
 }
