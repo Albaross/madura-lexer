@@ -38,6 +38,8 @@ data class StringToken(override val data: String) : Token {
 }
 
 data class SymbolToken(override val data: String) : Token {
+    constructor(char: Char) : this(char.toString())
+
     override val type: TokenType get() = TokenType.SYMBOL
     override fun toString(): String = "$data : $type"
 }

@@ -43,9 +43,8 @@ internal class LexerTest {
 
     @Test
     fun `should recognize keywords`() {
-        val keyword = "if"
-        val result = lexer.scan(keyword)
-        assertEquals(listOf(KeywordToken(keyword)), result)
+        val result = lexer.scan(Keyword.IF.toString())
+        assertEquals(listOf(KeywordToken(Keyword.IF)), result)
     }
 
     @Test
@@ -108,7 +107,7 @@ internal class LexerTest {
     fun `should recognize attributes on numbers`() {
         val attribute = "50.successor"
         val result = lexer.scan(attribute)
-        assertEquals(listOf(NumberToken("50"), SymbolToken("."), NameToken("successor")), result)
+        assertEquals(listOf(NumberToken(50), SymbolToken('.'), NameToken("successor")), result)
     }
 
     @Test
@@ -157,7 +156,7 @@ internal class LexerTest {
     fun `should recognize various successive symbols `() {
         val access = "[]"
         val result = lexer.scan(access)
-        assertEquals(listOf(SymbolToken("["), SymbolToken("]")), result)
+        assertEquals(listOf(SymbolToken('['), SymbolToken(']')), result)
     }
 
     @Test
@@ -173,15 +172,15 @@ internal class LexerTest {
         val result = lexer.scan(programm)
         assertEquals(
             listOf(
-                KeywordToken("fn"),
+                KeywordToken(Keyword.FN),
                 NameToken("main"),
-                SymbolToken("("),
-                SymbolToken(")"),
+                SymbolToken('('),
+                SymbolToken(')'),
                 SymbolToken("=>"),
                 NameToken("println"),
-                SymbolToken("("),
+                SymbolToken('('),
                 StringToken("\"Hello world\""),
-                SymbolToken(")")
+                SymbolToken(')')
             ), result
         )
     }
