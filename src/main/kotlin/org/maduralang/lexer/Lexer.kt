@@ -79,8 +79,14 @@ class Lexer {
         val lexeme = when (val c = input[pos]) {
             '.', '?' -> if (lookahead(input, pos + 1) { it == '.' }) "$c." else "$c"
 
-            '+', '*', '/', '^', '%', '<', '>' ->
+            '+', '*', '/', '^', '%' ->
                 if (lookahead(input, pos + 1) { it == '=' }) "$c=" else "$c"
+
+            '<', '>' -> when {
+                lookahead(input, pos + 1) { it == '=' } -> "$c="
+                lookahead(input, pos + 1) { it == c } -> if (lookahead(input, pos + 2) { it == c }) "$c$c$c" else "$c$c"
+                else -> "$c"
+            }
 
             '-' -> when {
                 lookahead(input, pos + 1) { it == '=' } -> "-="
